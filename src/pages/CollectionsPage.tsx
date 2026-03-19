@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { Plus, ChevronRight } from "lucide-react";
 import { mockCollections, mockRecipes } from "@/data/mockRecipes";
 import BottomNav from "@/components/BottomNav";
 
@@ -7,33 +7,47 @@ const CollectionsPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 pt-6">
-        <h1 className="text-2xl font-serif text-foreground mb-1">Collections</h1>
-        <p className="text-sm text-muted-foreground mb-6">Organize your saved recipes</p>
+    <div className="min-h-screen bg-background pb-24">
+      <div className="max-w-2xl mx-auto px-5 pt-8">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-serif text-foreground">Collections</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Organize your saved recipes</p>
+          </div>
+          <button className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
 
         <div className="space-y-3">
-          {mockCollections.map((col) => {
+          {mockCollections.map((col, i) => {
             const recipes = mockRecipes.filter((r) => r.collections.includes(col.id));
             return (
               <div
                 key={col.id}
-                className="flex items-center gap-4 p-4 bg-card rounded-2xl border border-border/50 shadow-sm"
+                className="flex items-center gap-4 p-4 bg-card rounded-2xl border border-border/40 shadow-card hover:shadow-card-hover transition-all cursor-pointer group animate-fade-in"
+                style={{ animationDelay: `${i * 60}ms` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-2xl">
+                <div className="w-14 h-14 rounded-2xl bg-warm-surface flex items-center justify-center text-2xl shadow-soft">
                   {col.emoji}
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-sm text-foreground">{col.name}</h3>
-                  <p className="text-xs text-muted-foreground">{recipes.length} recipes</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{col.name}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{recipes.length} recipe{recipes.length !== 1 ? "s" : ""}</p>
                 </div>
-                {recipes[0] && (
-                  <img
-                    src={recipes[0].image}
-                    alt=""
-                    className="w-10 h-10 rounded-lg object-cover"
-                  />
-                )}
+                <div className="flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    {recipes.slice(0, 3).map((r) => (
+                      <img
+                        key={r.id}
+                        src={r.image}
+                        alt=""
+                        className="w-8 h-8 rounded-lg object-cover border-2 border-card"
+                      />
+                    ))}
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
+                </div>
               </div>
             );
           })}

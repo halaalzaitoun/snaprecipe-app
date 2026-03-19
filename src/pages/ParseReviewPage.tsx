@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertCircle, Sparkles, ChefHat } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
 
 const parsedRecipe = {
@@ -26,6 +26,13 @@ const parsedRecipe = {
   nutrition: { calories: 380, protein: 12, carbs: 54, fat: 14 },
 };
 
+const nutritionItems = [
+  { key: "calories", label: "Calories", value: parsedRecipe.nutrition.calories, unit: "kcal", color: "text-primary" },
+  { key: "protein", label: "Protein", value: parsedRecipe.nutrition.protein, unit: "g", color: "text-tag-protein" },
+  { key: "carbs", label: "Carbs", value: parsedRecipe.nutrition.carbs, unit: "g", color: "text-tag-quick" },
+  { key: "fat", label: "Fat", value: parsedRecipe.nutrition.fat, unit: "g", color: "text-tag-dessert" },
+];
+
 const ParseReviewPage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState(parsedRecipe.title);
@@ -35,122 +42,127 @@ const ParseReviewPage = () => {
 
   const handleSave = () => {
     setSaving(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 1200);
+    setTimeout(() => navigate("/"), 1200);
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 pt-6">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-muted-foreground mb-4">
+    <div className="min-h-screen bg-background pb-24">
+      <div className="max-w-2xl mx-auto px-5 pt-8">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-muted-foreground mb-6 hover:text-foreground transition-colors">
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Back</span>
+          <span className="text-sm font-medium">Back</span>
         </button>
 
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-5 h-5 text-primary" />
-          <h1 className="text-2xl font-serif text-foreground">Review Recipe</h1>
-        </div>
-        <p className="text-sm text-muted-foreground mb-5">Edit any fields before saving</p>
-
-        {/* Confidence */}
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-accent/10 mb-5">
-          <CheckCircle2 className="w-4 h-4 text-accent" />
-          <span className="text-sm font-medium text-accent">
-            {parsedRecipe.confidence}% parsing confidence
-          </span>
+        {/* Header with confidence */}
+        <div className="flex items-start justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-accent/10 flex items-center justify-center">
+              <ChefHat className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-serif text-foreground">Review Recipe</h1>
+              <p className="text-sm text-muted-foreground">Edit fields before saving</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10">
+            <CheckCircle2 className="w-3.5 h-3.5 text-accent" />
+            <span className="text-xs font-bold text-accent">{parsedRecipe.confidence}%</span>
+          </div>
         </div>
 
         {/* Title */}
-        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
-          Recipe Title
-        </label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-3 rounded-xl bg-secondary text-foreground text-sm border-0 focus:outline-none focus:ring-2 focus:ring-primary/30 mb-5"
-        />
+        <div className="mb-5">
+          <label className="block text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Recipe Title
+          </label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-3 rounded-2xl bg-card text-foreground text-sm font-medium border border-border/60 shadow-soft focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
+          />
+        </div>
 
         {/* Nutrition */}
-        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-          Estimated Nutrition
-        </label>
-        <div className="grid grid-cols-4 gap-2 mb-5">
-          {[
-            { label: "Calories", value: parsedRecipe.nutrition.calories, unit: "kcal" },
-            { label: "Protein", value: parsedRecipe.nutrition.protein, unit: "g" },
-            { label: "Carbs", value: parsedRecipe.nutrition.carbs, unit: "g" },
-            { label: "Fat", value: parsedRecipe.nutrition.fat, unit: "g" },
-          ].map((n) => (
-            <div key={n.label} className="bg-secondary rounded-xl p-3 text-center">
-              <div className="text-lg font-bold text-foreground">{n.value}</div>
-              <div className="text-[10px] text-muted-foreground">{n.label}</div>
-            </div>
-          ))}
+        <div className="mb-5">
+          <label className="block text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Estimated Nutrition
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {nutritionItems.map((n) => (
+              <div key={n.key} className="bg-card rounded-2xl p-3 text-center border border-border/40 shadow-soft">
+                <div className={`text-xl font-bold ${n.color}`}>{n.value}</div>
+                <div className="text-[10px] font-medium text-muted-foreground mt-0.5">{n.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Ingredients */}
-        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
-          Ingredients
-        </label>
-        <div className="space-y-2 mb-5">
-          {ingredients.map((ing, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-              <input
-                value={ing}
-                onChange={(e) => {
-                  const updated = [...ingredients];
-                  updated[i] = e.target.value;
-                  setIngredients(updated);
-                }}
-                className="flex-1 p-2 rounded-lg bg-secondary text-foreground text-sm border-0 focus:outline-none focus:ring-2 focus:ring-primary/30"
-              />
-            </div>
-          ))}
+        <div className="mb-5">
+          <label className="block text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Ingredients ({ingredients.length})
+          </label>
+          <div className="bg-card rounded-2xl border border-border/40 shadow-soft overflow-hidden divide-y divide-border/40">
+            {ingredients.map((ing, i) => (
+              <div key={i} className="flex items-center gap-3 px-4 py-2.5">
+                <div className="w-2 h-2 rounded-full bg-primary/60 flex-shrink-0" />
+                <input
+                  value={ing}
+                  onChange={(e) => {
+                    const updated = [...ingredients];
+                    updated[i] = e.target.value;
+                    setIngredients(updated);
+                  }}
+                  className="flex-1 bg-transparent text-foreground text-sm focus:outline-none"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Instructions */}
-        <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
-          Instructions
-        </label>
-        <div className="space-y-2 mb-6">
-          {instructions.map((step, i) => (
-            <div key={i} className="flex gap-2">
-              <span className="text-xs font-bold text-primary mt-2.5 flex-shrink-0 w-5">{i + 1}.</span>
-              <textarea
-                value={step}
-                onChange={(e) => {
-                  const updated = [...instructions];
-                  updated[i] = e.target.value;
-                  setInstructions(updated);
-                }}
-                rows={2}
-                className="flex-1 p-2 rounded-lg bg-secondary text-foreground text-sm border-0 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
-              />
-            </div>
-          ))}
+        <div className="mb-8">
+          <label className="block text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-2">
+            Instructions ({instructions.length} steps)
+          </label>
+          <div className="space-y-2">
+            {instructions.map((step, i) => (
+              <div key={i} className="flex gap-3 bg-card rounded-2xl border border-border/40 shadow-soft p-3.5">
+                <span className="w-7 h-7 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center flex-shrink-0">
+                  {i + 1}
+                </span>
+                <textarea
+                  value={step}
+                  onChange={(e) => {
+                    const updated = [...instructions];
+                    updated[i] = e.target.value;
+                    setInstructions(updated);
+                  }}
+                  rows={2}
+                  className="flex-1 bg-transparent text-foreground text-sm focus:outline-none resize-none leading-relaxed"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Save */}
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-sm hover:opacity-90 transition-all disabled:opacity-60"
-        >
-          {saving ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="animate-pulse-soft">Saving...</span>
-            </span>
-          ) : (
-            "Confirm & Save to Library ✓"
-          )}
-        </button>
-
-        <div className="flex items-center justify-center gap-1.5 mt-3 mb-4">
-          <AlertCircle className="w-3 h-3 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">Nutrition values are AI estimates</span>
+        <div className="sticky bottom-20 bg-background/80 backdrop-blur-md py-4 -mx-5 px-5 border-t border-border/40">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full py-3.5 rounded-2xl bg-primary text-primary-foreground font-semibold text-sm shadow-warm hover:shadow-lg hover:opacity-95 transition-all active:scale-[0.98] disabled:opacity-60"
+          >
+            {saving ? (
+              <span className="animate-pulse-soft">Saving to library...</span>
+            ) : (
+              "Confirm & Save to Library ✓"
+            )}
+          </button>
+          <div className="flex items-center justify-center gap-1.5 mt-2.5">
+            <AlertCircle className="w-3 h-3 text-muted-foreground" />
+            <span className="text-[11px] text-muted-foreground">Nutrition values are AI estimates</span>
+          </div>
         </div>
       </div>
       <BottomNav />

@@ -1,43 +1,57 @@
-import { User, BookOpen, ChefHat, Award } from "lucide-react";
+import { User, BookOpen, ChefHat, Award, ChevronRight, Settings, Heart, Download, HelpCircle } from "lucide-react";
 import BottomNav from "@/components/BottomNav";
+
+const stats = [
+  { icon: BookOpen, label: "Recipes", value: "6" },
+  { icon: ChefHat, label: "Collections", value: "5" },
+  { icon: Award, label: "Streak", value: "12d" },
+];
+
+const menuItems = [
+  { icon: Settings, label: "Settings" },
+  { icon: Heart, label: "Dietary Preferences" },
+  { icon: Download, label: "Export Recipes" },
+  { icon: HelpCircle, label: "Help & Support" },
+];
 
 const ProfilePage = () => {
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 pt-6">
-        <h1 className="text-2xl font-serif text-foreground mb-6">Profile</h1>
+    <div className="min-h-screen bg-background pb-24">
+      <div className="max-w-2xl mx-auto px-5 pt-8">
+        <h1 className="text-3xl font-serif text-foreground mb-8">Profile</h1>
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+        {/* Avatar card */}
+        <div className="flex items-center gap-4 p-5 bg-card rounded-2xl border border-border/40 shadow-card mb-6 animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
             <User className="w-7 h-7 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-foreground">Alex Chen</h2>
+            <h2 className="font-bold text-lg text-foreground">Alex Chen</h2>
             <p className="text-sm text-muted-foreground">Home cook · Since Jan 2026</p>
           </div>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-8">
-          {[
-            { icon: BookOpen, label: "Recipes", value: "6" },
-            { icon: ChefHat, label: "Collections", value: "5" },
-            { icon: Award, label: "Streak", value: "12 days" },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-card rounded-2xl p-4 text-center border border-border/50">
-              <stat.icon className="w-5 h-5 text-primary mx-auto mb-1" />
-              <div className="text-lg font-bold text-foreground">{stat.value}</div>
-              <div className="text-[10px] text-muted-foreground">{stat.label}</div>
+          {stats.map((stat, i) => (
+            <div key={stat.label} className="bg-card rounded-2xl p-4 text-center border border-border/40 shadow-soft animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
+              <stat.icon className="w-5 h-5 text-primary mx-auto mb-1.5" />
+              <div className="text-xl font-bold text-foreground">{stat.value}</div>
+              <div className="text-[10px] font-medium text-muted-foreground mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
 
-        <div className="space-y-2">
-          {["Settings", "Dietary Preferences", "Export Recipes", "Help & Support"].map((item) => (
+        {/* Menu */}
+        <div className="bg-card rounded-2xl border border-border/40 shadow-soft overflow-hidden divide-y divide-border/40">
+          {menuItems.map((item) => (
             <button
-              key={item}
-              className="w-full text-left px-4 py-3 rounded-xl bg-card border border-border/50 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+              key={item.label}
+              className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-warm-surface transition-colors group"
             >
-              {item}
+              <item.icon className="w-[18px] h-[18px] text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="flex-1 text-sm font-medium text-foreground">{item.label}</span>
+              <ChevronRight className="w-4 h-4 text-muted-foreground/40" />
             </button>
           ))}
         </div>
