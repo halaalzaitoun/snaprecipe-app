@@ -140,7 +140,23 @@ SnapRecipe was created as part of a product portfolio to explore:
 
 ## 🖼 Product Screenshots
 
-_Add screenshots here (import flow, parsing screen, recipe view, library, collections)_
+### Home (Recipe Library)
+<img src="assets/home.png" width="300"/>
+
+### Import (Capture Input)
+<img src="assets/import.png" width="300"/>
+
+### Parsing Screen (Structuring Content)
+<img src="assets/parse.png" width="300"/>
+
+### Recipe View (Structured Output)
+<img src="assets/recipe.png" width="300"/>
+
+### Collections (Organization)
+<img src="assets/collections.png" width="300"/>
+
+### Profile
+<img src="assets/profile.png" width="300"/>
 
 ---
 
